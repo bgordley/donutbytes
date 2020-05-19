@@ -6,15 +6,14 @@ import javax.ws.rs.core.Response.Status;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import domains.donutbytes.UnitTestBase;
 import domains.donutbytes.models.AbcVerifiedContact;
 import domains.donutbytes.models.DomainResponse;
 import domains.donutbytes.models.RegisterDomainRequest;
 import domains.donutbytes.models.RenewDomainRequest;
 import domains.donutbytes.models.YearRegistrationPeriod;
 
-public class DomainResourceTest {
-
-    private static final String DOMAIN_NAME = "donutbytes.domains";
+public class DomainResourceTest extends UnitTestBase{
 
     private DomainResource domainResource;
 
@@ -25,10 +24,7 @@ public class DomainResourceTest {
 
     @Test
     public void testRegisterDomain() {
-        RegisterDomainRequest request = new RegisterDomainRequest();
-        request.setDomainName(DOMAIN_NAME);
-        request.setRegistrationPeriod(new YearRegistrationPeriod(1));
-        request.setVerifiedContact(new AbcVerifiedContact("test-client-id"));
+        RegisterDomainRequest request = buildRegisterDomainRequest();
 
         Response response = domainResource.registerDomain(request);
         DomainResponse responseEntity = (DomainResponse) response.getEntity();
@@ -41,9 +37,7 @@ public class DomainResourceTest {
 
     @Test
     public void testRenewDomain() {
-        RenewDomainRequest request = new RenewDomainRequest();
-        request.setDomainName(DOMAIN_NAME);
-        request.setRegistrationPeriod(new YearRegistrationPeriod(1));
+        RenewDomainRequest request = buildRenewDomainRequest();
 
         Response response = domainResource.renewDomain(request);
         DomainResponse responseEntity = (DomainResponse) response.getEntity();
