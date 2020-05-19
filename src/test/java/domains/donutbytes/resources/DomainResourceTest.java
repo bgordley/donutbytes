@@ -5,21 +5,21 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import domains.donutbytes.UnitTestBase;
-import domains.donutbytes.models.AbcVerifiedContact;
 import domains.donutbytes.models.DomainResponse;
 import domains.donutbytes.models.RegisterDomainRequest;
 import domains.donutbytes.models.RenewDomainRequest;
-import domains.donutbytes.models.YearRegistrationPeriod;
+import domains.donutbytes.providers.DomainProvider;
 
-public class DomainResourceTest extends UnitTestBase{
+public class DomainResourceTest extends UnitTestBase {
 
     private DomainResource domainResource;
 
-    @BeforeClass
-    public void setup() {
-        this.domainResource = new DomainResource();
+    @BeforeMethod
+    public void beforeMethod() {
+        this.domainResource = new DomainResource(new DomainProvider());
     }
 
     @Test
@@ -37,6 +37,7 @@ public class DomainResourceTest extends UnitTestBase{
 
     @Test
     public void testRenewDomain() {
+        domainResource.registerDomain(buildRegisterDomainRequest());
         RenewDomainRequest request = buildRenewDomainRequest();
 
         Response response = domainResource.renewDomain(request);
@@ -50,6 +51,7 @@ public class DomainResourceTest extends UnitTestBase{
 
     @Test
     public void testDeleteDomain() {
+        domainResource.registerDomain(buildRegisterDomainRequest());
         Response response = domainResource.deleteDomain(DOMAIN_NAME);
 
         Assert.assertEquals(response.getStatus(), Status.NO_CONTENT.getStatusCode());
@@ -57,6 +59,7 @@ public class DomainResourceTest extends UnitTestBase{
 
     @Test
     public void testGetDomainInfo() {
+        domainResource.registerDomain(buildRegisterDomainRequest());
         Response response = domainResource.getDomainInfo(DOMAIN_NAME);
         DomainResponse responseEntity = (DomainResponse) response.getEntity();
 

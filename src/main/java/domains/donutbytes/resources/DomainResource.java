@@ -1,6 +1,5 @@
 package domains.donutbytes.resources;
 
-import java.time.ZonedDateTime;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -13,74 +12,72 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import domains.donutbytes.errors.DomainProviderException;
 import domains.donutbytes.models.DomainResponse;
-import domains.donutbytes.models.MonthRegistrationPeriod;
 import domains.donutbytes.models.RegisterDomainRequest;
 import domains.donutbytes.models.RenewDomainRequest;
-import domains.donutbytes.models.YearRegistrationPeriod;
+import domains.donutbytes.providers.IDomainProvider;
 
 @Path("/domain")
 @Produces(MediaType.APPLICATION_JSON)
 public class DomainResource {
 
+    private final IDomainProvider domainProvider;
+
+    public DomainResource(IDomainProvider domainProvider) {
+        this.domainProvider = domainProvider;
+    }
+
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public Response registerDomain(@NotNull RegisterDomainRequest request) {
-        // Call provider
-
-        ZonedDateTime exp = ZonedDateTime.now();
-        if (request.getRegistrationPeriod() instanceof YearRegistrationPeriod) {
-            exp = exp.plusYears(request.getRegistrationPeriod().getValue());
-        } else if (request.getRegistrationPeriod() instanceof MonthRegistrationPeriod) {
-            exp = exp.plusMonths(request.getRegistrationPeriod().getValue());
+        DomainResponse response;
+        try {
+            response = domainProvider.createDomain(request);
+        } catch (DomainProviderException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
 
-        return Response
-            .status(Status.CREATED)
-            .entity(new DomainResponse(request.getDomainName(), exp))
-            .build();
+        return Response.status(Status.CREATED).entity(response).build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response renewDomain(@NotNull RenewDomainRequest request) {
-        // Call provider
-
-        ZonedDateTime exp = ZonedDateTime.now();
-        if (request.getRegistrationPeriod() instanceof YearRegistrationPeriod) {
-            exp = exp.plusYears(request.getRegistrationPeriod().getValue());
-        } else if (request.getRegistrationPeriod() instanceof MonthRegistrationPeriod) {
-            exp = exp.plusMonths(request.getRegistrationPeriod().getValue());
+        DomainResponse response;
+        try {
+            response = domainProvider.updateDomain(request);
+        } catch (DomainProviderException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
 
-        return Response
-            .status(Status.OK)
-            .entity(new DomainResponse(request.getDomainName(), exp))
-            .build();
+        return Response.status(Status.OK).entity(response).build();
     }
 
     @DELETE
     @Path("/{name}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response deleteDomain(@PathParam("name") String domainName) {
-        // Call provider
+        try {
+            domainProvider.deleteDomain(domainName);
+        } catch (DomainProviderException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
 
-        return Response
-            .status(Status.NO_CONTENT)
-            .build();
+        return Response.status(Status.NO_CONTENT).build();
     }
 
     @GET
     @Path("/{name}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getDomainInfo(@PathParam("name") String domainName) {
-        // Call provider
+        DomainResponse response;
+        try {
+            response = domainProvider.getDomain(domainName);
+        } catch (DomainProviderException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
 
-        ZonedDateTime exp = ZonedDateTime.now().plusYears(1);
-
-        return Response
-            .status(Status.OK)
-            .entity(new DomainResponse(domainName, exp))
-            .build();
+        return Response.status(Status.OK).entity(response).build();
     }
 }
