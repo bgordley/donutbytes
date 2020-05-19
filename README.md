@@ -7,6 +7,52 @@ A mini domain name registration (DNR) service.
 1. Start the service with `java -jar target/service-0.0.1-SNAPSHOT.jar server config.yml`
 1. The service should now be reachable via `http://localhost:8080`
 
+### Example requests
+
+Register a domain
+```
+curl --request PUT \
+  --url http://localhost:8080/domain \
+  --header 'content-type: application/json' \
+  --data '{
+	"domainName": "donutbytes.domains",
+	"registrationPeriod": {
+		"unit": "year",
+		"value": 1
+	},
+	"verifiedContact": {
+		"provider": "abc",
+		"contactId": "abc-contact-id"
+	}
+}'
+```
+
+Renew a domain
+```
+curl --request POST \
+  --url http://localhost:8080/domain \
+  --header 'content-type: application/json' \
+  --data '{
+	"domainName": "donutbytes.domains",
+	"registrationPeriod": {
+		"unit": "year",
+		"value": 1
+	}
+}'
+```
+
+Get domain information
+```
+curl --request GET \
+  --url http://localhost:8080/domain/donutbytes.domains
+```
+
+Delete a domain
+```
+curl --request DELETE \
+  --url http://localhost:8080/domain/donutbytes.domains
+```
+
 ## API Endpoints
 | Method | Route          | Req. Body             | Res. Body      | Headers       |
 |--------|----------------|-----------------------|----------------|---------------|
@@ -16,7 +62,7 @@ A mini domain name registration (DNR) service.
 | GET    | /domain/{name} |                       | DomainResponse |               |
 
 
-## Authorization
+## Authorization (Not Implemented)
 JWT Header Structure
 ```
 {
