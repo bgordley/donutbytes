@@ -13,4 +13,9 @@ import lombok.NonNull;
 public class XyzVerifiedContact extends VerifiedContact {
     @NonNull
     private String decryptionPublicKey;
+
+    public XyzVerifiedContact(String clientId, String decryptionPublicKey) {
+        super("xyz", clientId);
+        this.decryptionPublicKey = decryptionPublicKey;
+    }
 }

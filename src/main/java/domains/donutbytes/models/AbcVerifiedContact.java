@@ -7,4 +7,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class AbcVerifiedContact extends VerifiedContact {
 
+    public AbcVerifiedContact(String contactId) {
+        super("abc", contactId);
+    }
 }

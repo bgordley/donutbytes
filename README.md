@@ -8,12 +8,12 @@ A mini domain name registration (DNR) service.
 1. The service should now be reachable via `http://localhost:8080`
 
 ## API Endpoints
-| Method | Route          | Req. Body           | Res. Body      | Headers       |
-|--------|----------------|---------------------|----------------|---------------|
-| PUT    | /domain        | DomainCreateRequest | DomainResponse | Authorization |
-| POST   | /domain        | DomainUpdateRequest | DomainResponse | Authorization |
-| DELETE | /domain/{name} |                     |                | Authorization |
-| GET    | /domain/{name} |                     | DomainResponse |               |
+| Method | Route          | Req. Body             | Res. Body      | Headers       |
+|--------|----------------|-----------------------|----------------|---------------|
+| PUT    | /domain        | RegisterDomainRequest | DomainResponse | Authorization |
+| POST   | /domain        | RenewDomainRequest    | DomainResponse | Authorization |
+| DELETE | /domain/{name} |                       |                | Authorization |
+| GET    | /domain/{name} |                       | DomainResponse |               |
 
 
 ## Authorization

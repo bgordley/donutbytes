@@ -7,4 +7,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class YearRegistrationPeriod extends RegistrationPeriod {
 
+    public YearRegistrationPeriod(int value) {
+        super("year", value);
+    }
 }

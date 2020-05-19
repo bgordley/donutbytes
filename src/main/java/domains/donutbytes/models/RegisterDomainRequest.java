@@ -10,7 +10,7 @@ import lombok.NonNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class DomainCreateRequest extends DomainRequest {
+public class RegisterDomainRequest extends DomainRequest {
     @NonNull
     private VerifiedContact verifiedContact;
 }
