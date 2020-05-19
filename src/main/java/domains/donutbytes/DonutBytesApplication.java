@@ -6,6 +6,7 @@ import io.dropwizard.setup.Environment;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import domains.donutbytes.config.DonutBytesConfig;
+import domains.donutbytes.health.ServiceHealthCheck;
 import domains.donutbytes.resources.DomainResource;
 
 public class DonutBytesApplication extends Application<DonutBytesConfig> {
@@ -24,11 +25,11 @@ public class DonutBytesApplication extends Application<DonutBytesConfig> {
         bootstrap.getObjectMapper()
             .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
     }
 
     @Override
     public void run(final DonutBytesConfig configuration, final Environment environment) {
+        environment.healthChecks().register("service", new ServiceHealthCheck());
         environment.jersey().register(new DomainResource());
     }
 
