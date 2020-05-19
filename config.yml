@@ -1,4 +1,9 @@
+# Dropwizard Service Values
 logging:
   level: INFO
   loggers:
     domains.donutbytes: DEBUG
+
+# Custom Config Values
+domainValidation:
+  minimumLength: 10
