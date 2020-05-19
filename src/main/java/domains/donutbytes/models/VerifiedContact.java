@@ -3,7 +3,10 @@ package domains.donutbytes.models;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME, 
@@ -13,8 +16,12 @@ import lombok.Data;
   @Type(value = AbcVerifiedContact.class, name = "abc"),
   @Type(value = XyzVerifiedContact.class, name = "xyz")
 })
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 public abstract class VerifiedContact {
-    private String provider;
-    private String contactId;
+  @NonNull
+  private String provider;
+  @NonNull
+  private String contactId;
 }

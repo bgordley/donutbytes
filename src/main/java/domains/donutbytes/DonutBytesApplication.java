@@ -3,7 +3,10 @@ package domains.donutbytes;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import domains.donutbytes.config.DonutBytesConfig;
+import domains.donutbytes.resources.DomainResource;
 
 public class DonutBytesApplication extends Application<DonutBytesConfig> {
 
@@ -18,12 +21,15 @@ public class DonutBytesApplication extends Application<DonutBytesConfig> {
 
     @Override
     public void initialize(final Bootstrap<DonutBytesConfig> bootstrap) {
-        // TODO: application initialization
+        bootstrap.getObjectMapper()
+            .registerModule(new JavaTimeModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
     }
 
     @Override
     public void run(final DonutBytesConfig configuration, final Environment environment) {
-        // TODO: implement application
+        environment.jersey().register(new DomainResource());
     }
 
 }
